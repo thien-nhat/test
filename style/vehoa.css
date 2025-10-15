@@ -1,0 +1,66 @@
+html, body {
+  font-family: 'Pacifico', cursive;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: start;
+}
+.clean-btn {
+  z-index: 1;
+  font-family: sans-serif;
+  font-size: 15px;
+  color: white;
+  text-shadow: 0 0 5px rgba(255,255,255,0.8);
+  user-select: none;
+  padding: 8px 16px;
+  margin: 20px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 10px rgba(255,255,200,0.5);
+  transition: all 0.3s ease;
+  opacity: 0.5;
+  font-family: 'Pacifico', cursive;
+}
+.clean-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 20px rgba(255,255,200,0.8);
+  transform: scale(1.05);
+  opacity: 1;
+}
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+}
+.name {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  font-size: 4vw;
+  text-shadow: 0 0 5px #000000;
+  user-select: auto;
+  pointer-events: none;
+  opacity: 0.1;
+}
+@media all and (min-width: 640px) {
+  .name {
+    font-size: 45px
+  }
+}

@@ -1,0 +1,312 @@
+﻿<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Trung Thu Vui Vẻ 🌕</title>
+    <style>
+        :root {
+            --accent: #ff7f50;
+        }
+
+        body {
+            margin: 0;
+            background: #060614;
+            overflow: hidden;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        /* 🌠 Nền sao băng */
+        canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
+
+        /* 🌕 Mặt trăng siêu thật nâng cấp */
+        .moon {
+            position: fixed;
+            top: 40px;
+            right: 60px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #fffdf5 0%, #f5f2e9 30%, #ddd9c9 55%, #bcb8a9 75%, #9a9689 100%);
+            box-shadow: 0 0 80px 35px rgba(255, 255, 200, 0.55), 0 0 150px 70px rgba(255, 255, 150, 0.25), 0 0 250px 150px rgba(255, 255, 100, 0.1);
+            z-index: 2;
+            overflow: hidden;
+            animation: glow 10s ease-in-out infinite alternate;
+        }
+
+            /* 🌑 Vân mặt trăng – thêm lớp chi tiết và chiều sâu */
+            .moon::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image: radial-gradient(circle at 15% 20%, rgba(150,150,150,0.35) 0%, transparent 45%), radial-gradient(circle at 35% 65%, rgba(120,120,120,0.3) 0%, transparent 50%), radial-gradient(circle at 70% 60%, rgba(80,80,80,0.25) 0%, transparent 50%), radial-gradient(circle at 80% 40%, rgba(180,180,180,0.35) 0%, transparent 55%), radial-gradient(circle at 45% 45%, rgba(100,100,100,0.25) 0%, transparent 65%);
+                mix-blend-mode: multiply;
+                opacity: 0.9;
+                filter: contrast(1.2) brightness(0.95) blur(0.8px);
+                animation: moonTexture 50s ease-in-out infinite alternate;
+            }
+
+            /* 🌫️ Lớp ánh sáng loang mềm (giả ánh mây bay qua) */
+            .moon::after {
+                content: "";
+                position: absolute;
+                inset: -60%;
+                background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 70%);
+                filter: blur(45px);
+                opacity: 0.45;
+                mix-blend-mode: screen;
+                animation: moonGlowMove 25s linear infinite;
+            }
+
+        /* ✨ Nhịp thở của ánh sáng */
+        @keyframes glow {
+            0% {
+                transform: scale(1);
+                filter: brightness(1);
+            }
+
+            100% {
+                transform: scale(1.05);
+                filter: brightness(1.25);
+            }
+        }
+
+        /* 🌕 Dịch chuyển vân nhẹ nhàng */
+        @keyframes moonTexture {
+            0% {
+                transform: translate(0%, 0%) scale(1);
+            }
+
+            100% {
+                transform: translate(-3%, 2%) scale(1.03);
+            }
+        }
+
+        /* 🌫️ Ánh sáng mờ trôi */
+        @keyframes moonGlowMove {
+            0% {
+                transform: translate(-10%, -5%) rotate(0deg);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: translate(10%, 5%) rotate(180deg);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translate(-10%, -5%) rotate(360deg);
+                opacity: 0.4;
+            }
+        }
+
+
+
+        /* 🏮 Đèn lồng */
+        .lantern {
+            position: absolute;
+            width: 40px;
+            pointer-events: auto;
+            filter: drop-shadow(0 0 15px rgba(255,140,0,0.8));
+            transition: transform 0.3s ease, filter 0.3s ease; /* mượt */
+            z-index: 900;
+        }
+
+            .lantern:hover {
+                transform: scale(1.5); /* hình lồng đèn to ra */
+                filter: drop-shadow(0 0 35px rgba(255,200,100,0.9)); /* ánh sáng mạnh hơn */
+                z-index: 900; /* nổi lên trên */
+            }
+
+
+        /* 💫 Lời chúc */
+        #wish-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            background: rgba(255,255,255,0.95);
+            color: #ff5722;
+            padding: 20px 24px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(255,150,80,0.6);
+            font-weight: bold;
+            display: none;
+            z-index: 999;
+        }
+
+        /* 🔊 Nút nhạc */
+        #musicToggle {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            color: #fff;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* ✨ Gợi ý */
+        #hint {
+            position: fixed;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg,#ff7f50,#ff5722);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity .5s;
+            z-index: 10;
+            animation: float 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(-50%,0);
+            }
+
+            to {
+                transform: translate(-50%,-8px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="starfield"></canvas>
+    <div class="moon"></div>
+    <div id="lantern-container"></div>
+    <div id="wish-popup"></div>
+    <div id="musicToggle">🎵</div>
+    <div id="hint">Chạm để bật nhạc và thả đèn ✨</div>
+
+    <audio id="bg-music" loop>
+        <source src="audio/4318970730615526159.mp3" type="audio/mp3">
+    </audio>
+
+    <script>
+        // 🌠 Nền sao băng
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let w, h, stars = [], meteors = [];
+        function resize() {
+            w = canvas.width = innerWidth;
+            h = canvas.height = innerHeight;
+            stars = Array.from({ length: Math.round((w * h) / 2500) }, () => ({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                r: Math.random() * 1.2,
+                a: Math.random(),
+            }));
+        }
+        function drawStars() {
+            ctx.clearRect(0, 0, w, h);
+            for (const s of stars) {
+                ctx.globalAlpha = s.a;
+                ctx.fillStyle = "#fff";
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
+        function createMeteor() {
+            meteors.push({ x: Math.random() * w, y: Math.random() * h / 2, vx: 8, vy: 4, len: 120, a: 1 });
+        }
+        function drawMeteors() {
+            for (let i = meteors.length - 1; i >= 0; i--) {
+                const m = meteors[i];
+                const g = ctx.createLinearGradient(m.x, m.y, m.x - m.len, m.y - m.len / 2);
+                g.addColorStop(0, `rgba(255,255,255,${m.a})`);
+                g.addColorStop(1, "rgba(255,255,255,0)");
+                ctx.strokeStyle = g;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(m.x, m.y);
+                ctx.lineTo(m.x - m.len, m.y - m.len / 2);
+                ctx.stroke();
+                m.x += m.vx; m.y += m.vy; m.a -= 0.02;
+                if (m.a <= 0) meteors.splice(i, 1);
+            }
+        }
+        function loop() {
+            drawStars(); drawMeteors();
+            if (Math.random() < 0.02) createMeteor();
+            requestAnimationFrame(loop);
+        }
+        window.addEventListener('resize', resize);
+        resize(); loop();
+
+        // 🏮 Đèn lồng & popup
+        const lanternContainer = document.getElementById('lantern-container');
+        const popup = document.getElementById('wish-popup');
+        const wishes = [
+            "🎑 Chúc bạn Trung Thu vui vẻ, tràn ngập tiếng cười! 🌕",
+            "🌸 Hạnh phúc như ánh trăng rằm nhé! 💖",
+            "🐇 Chúc bạn và gia đình đêm trăng ấm áp!",
+            "🍰 Bánh ngon, đèn sáng, niềm vui ngập tràn! 🎉",
+            // thêm những lời chúc mới
+            "✨ Trung Thu này, chúc bạn tràn đầy niềm vui và hạnh phúc!",
+            "🌕 Ngắm trăng rằm, nhớ rằng mọi điều tốt đẹp đang đến với bạn!",
+            "🏮 Thả đèn lên trời, gửi gắm mọi ước muốn và may mắn!",
+            "💖 Mong bạn luôn vui vẻ, khỏe mạnh và bình an trong từng khoảnh khắc!"
+        ];
+        function createLantern() {
+            const img = document.createElement("img");
+            img.src = "https://github.com/Panbap/Trungthu/blob/main/den.png?raw=true";
+            img.className = "lantern";
+            img.style.left = Math.random() * 90 + "vw";
+            img.style.bottom = "0px";
+            const size = 30 + Math.random() * 40;
+            img.style.width = size + "px";
+            lanternContainer.appendChild(img);
+            const drift = (Math.random() * 120 - 60);
+            const up = 100 + Math.random() * 40;
+            img.animate([{ transform: "translate(0,0)", opacity: 1 },
+            { transform: `translate(${drift}px,-${up}vh)`, opacity: 0 }],
+                { duration: 10000 + Math.random() * 4000, easing: "linear", fill: "forwards" });
+            img.addEventListener("click", e => {
+                e.stopPropagation();
+                popup.textContent = wishes[Math.floor(Math.random() * wishes.length)];
+                popup.style.display = "block";
+            });
+            setTimeout(() => img.remove(), 12000);
+        }
+        setInterval(createLantern, 700);
+
+        document.addEventListener("click", () => {
+            if (popup.style.display === "block") popup.style.display = "none";
+        });
+
+        // 🎵 Nhạc nền
+        const bg = document.getElementById('bg-music');
+        const toggle = document.getElementById('musicToggle');
+        const hint = document.getElementById('hint');
+
+        // Bật nhạc tự động khi load
+        window.addEventListener('load', () => {
+            bg.volume = 0.7;
+            const playPromise = bg.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    toggle.textContent = "🔊";
+                    hint.style.opacity = "1";
+                    setTimeout(() => hint.style.opacity = "0", 3000);
+                })
+            }
+        });
+
+        // Nút bật/tắt nhạc
+        toggle.addEventListener("click", () => {
+            if (bg.paused) { bg.play(); toggle.textContent = "🔊"; }
+            else { bg.pause(); toggle.textContent = "🔈"; }
+        });
+    </script>
+</body>
+</html>
